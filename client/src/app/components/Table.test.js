@@ -52,21 +52,20 @@ describe("Table component", () => {
                 container: secondHeader,
             })[0]
         );
+
         await waitFor(() => {
             expect(onSortMock).toHaveBeenCalled();
         });
     });
 
-    it("calls onRowCLickMock if the prop is passed and a user clicks a row", async () => {
+    it("calls onRowCLick if the prop is passed and a user clicks a row", async () => {
         const onRowCLickMock = jest.fn();
         const newProps = {
             ...tableProps,
-            onRowCLick: onRowCLickMock,
+            onRowClick: onRowCLickMock,
         };
 
         render(<Table {...newProps} />);
-
-        screen.debug(screen.getAllByTestId("table-row")[0]);
 
         userEvent.click(screen.getAllByTestId("table-row")[0]);
 

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import { create } from "../api/projects";
+import { create } from "../../api/projects";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateProject() {
@@ -85,6 +85,7 @@ export default function CreateProject() {
                         Project Name
                     </label>
                     <input
+                        data-testid="name-input"
                         id="name"
                         type="text"
                         className={`w-full border border-slate-300 rounded-md h-12 px-6 mb-1 ${
@@ -103,6 +104,7 @@ export default function CreateProject() {
                         Project Deadline
                     </label>
                     <input
+                        data-testid="deadline-input"
                         id="deadline"
                         type="date"
                         className={`w-full border border-slate-300 rounded-md h-12 px-6 mb-1 ${

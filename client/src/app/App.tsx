@@ -4,7 +4,7 @@ import "./style.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Project from "./views/Project";
 import { QueryClient, QueryClientProvider } from "react-query";
-import CreateProject from "./views/CreateProject";
+import CreateProject from "./views/CreateProject/CreateProject";
 import CreateProjectEntry from "./views/CreateProjectEntry";
 
 const queryClient = new QueryClient();
