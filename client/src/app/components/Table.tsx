@@ -57,6 +57,7 @@ export default function Table<T>({
             <tbody>
                 {data.map((row, i) => (
                     <tr
+                        data-testid="table-row"
                         key={i}
                         onClick={() => {
                             onRowClick && onRowClick(row);
