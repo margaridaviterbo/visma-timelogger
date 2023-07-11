@@ -63,6 +63,16 @@ export default function CreateProject() {
         return isValid;
     };
 
+    const getErrorComponent = (inputField: string) => (
+        <ul>
+            {errors[inputField].map((error: string) => (
+                <li className="text-sm text-red-500 font-medium" key={error}>
+                    {error}
+                </li>
+            ))}
+        </ul>
+    );
+
     return (
         <>
             <div className="max-w-xl mx-auto my-6 space-y-6 text-slate-900">
@@ -83,18 +93,7 @@ export default function CreateProject() {
                         value={name}
                         onChange={handleNameChange}
                     />
-                    {errors.name && (
-                        <ul>
-                            {errors.name.map((error) => (
-                                <li
-                                    className="text-sm text-red-500 font-medium"
-                                    key={error}
-                                >
-                                    {error}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
+                    {errors.name && getErrorComponent("name")}
                 </div>
                 <div className="space-y-2">
                     <label
@@ -112,18 +111,7 @@ export default function CreateProject() {
                         value={deadline}
                         onChange={handleDeadlineChange}
                     />
-                    {errors.deadline && (
-                        <ul>
-                            {errors.deadline.map((error) => (
-                                <li
-                                    className="text-sm text-red-500 font-medium"
-                                    key={error}
-                                >
-                                    {error}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
+                    {errors.deadline && getErrorComponent("deadline")}
                 </div>
                 <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold h-12 px-4 rounded w-full"

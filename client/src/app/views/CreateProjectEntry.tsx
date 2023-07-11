@@ -14,9 +14,17 @@ export default function CreateProjectEntry() {
     }>({ description: [], duration: [] });
 
     const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
-        setDuration(parseInt(value, 10));
         setErrors((errors) => ({ ...errors, duration: [] }));
+        const { value } = e.target;
+
+        if (isNaN(parseInt(value, 10))) {
+            addError(
+                "duration",
+                "Duration must be an integer number bigger than 29."
+            );
+            return;
+        }
+        setDuration(parseInt(value, 10));
     };
 
     const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -64,6 +72,16 @@ export default function CreateProjectEntry() {
         return isValid;
     };
 
+    const getErrorComponent = (inputField: string) => (
+        <ul>
+            {errors[inputField].map((error: string) => (
+                <li className="text-sm text-red-500 font-medium" key={error}>
+                    {error}
+                </li>
+            ))}
+        </ul>
+    );
+
     return (
         <>
             <div className="max-w-xl mx-auto my-6 space-y-6 text-slate-900">
@@ -85,18 +103,7 @@ export default function CreateProjectEntry() {
                         onChange={handleDescriptionChange}
                         value={description}
                     />
-                    {errors.description && (
-                        <ul>
-                            {errors.description.map((error) => (
-                                <li
-                                    className="text-sm text-red-500 font-medium"
-                                    key={error}
-                                >
-                                    {error}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
+                    {errors.description && getErrorComponent("description")}
                 </div>
                 <div>
                     <label
@@ -115,18 +122,7 @@ export default function CreateProjectEntry() {
                         value={duration}
                         onChange={handleDurationChange}
                     />
-                    {errors.duration && (
-                        <ul>
-                            {errors.duration.map((error) => (
-                                <li
-                                    className="text-sm text-red-500 font-medium"
-                                    key={error}
-                                >
-                                    {error}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
+                    {errors.duration && getErrorComponent("duration")}
                 </div>
                 <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold h-12 px-4 rounded w-full"

@@ -4,18 +4,23 @@ import Table from "../components/Table";
 import { useQuery } from "react-query";
 import { Duration } from "luxon";
 import { getAll } from "../api/projects";
+// @ts-ignore
+import { ReactComponent as Spinner } from "../assets/Spinner.svg";
 
 const headers = [
     { name: "id", displayName: "#", sortable: false },
     { name: "name", displayName: "Project", sortable: false },
-    { name: "totalTime", displayName: "Total Time Spent", sortable: true },
+    { name: "totalTime", displayName: "Total Time (hh:mm)", sortable: true },
     { name: "deadline", displayName: "Deadline", sortable: true },
     { name: "completed", displayName: "Status", sortable: false },
 ];
 
 export default function ProjectsOverview() {
     const navigate = useNavigate();
-    const { data } = useQuery("projects", getAll);
+
+    const { data, isFetching, error, isError } = useQuery("projects", getAll, {
+        retry: 1,
+    });
     const [sort, setSort] = useState<string>();
 
     const displayData = data
@@ -37,7 +42,7 @@ export default function ProjectsOverview() {
         .map((entry) => ({
             ...entry,
             totalTime: Duration.fromObject({
-                seconds: entry.totalTime,
+                minutes: entry.totalTime,
             }).toFormat("hh:mm"),
             deadline: new Date(entry.deadline).toDateString(),
             completed: entry.completed ? "Completed" : "In progress",
@@ -62,32 +67,26 @@ export default function ProjectsOverview() {
                         Add Project
                     </Link>
                 </div>
-
-                <div className="w-1/2 flex justify-end">
-                    <form>
-                        <input
-                            className="border rounded-full py-2 px-4"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                        />
-                        <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white rounded-full py-2 px-4 ml-2"
-                            type="submit"
-                        >
-                            Search
-                        </button>
-                    </form>
-                </div>
             </div>
-            {/* isLoagins then spinner */}
-            {displayData && (
-                <Table
-                    headers={headers}
-                    data={displayData}
-                    onSort={onSort}
-                    onRowClick={onRowClick}
-                />
+            {isFetching ? (
+                <div>
+                    <h1>Loading Projects</h1>
+                    <Spinner />
+                </div>
+            ) : (
+                displayData && (
+                    <Table
+                        headers={headers}
+                        data={displayData}
+                        onSort={onSort}
+                        onRowClick={onRowClick}
+                    />
+                )
+            )}
+            {isError && (
+                <p className="text-md text-red-500 font-medium">
+                    {(error as Error).message}
+                </p>
             )}
         </>
     );
